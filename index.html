@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lễ Tốt Nghiệp: Hành Trình Lãnh Đạo Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Oswald:wght@300;400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Simple Confetti Lib -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body { font-family: 'Roboto', sans-serif; background-color: #f0fdf4; color: #1e293b; }
+        h1, h2, h3, .heading { font-family: 'Oswald', sans-serif; }
+        .handwritten { font-family: 'Dancing Script', cursive; }
+        
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(to right, #15803d, #166534);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Certificate Styles */
+        .certificate-container {
+            background: #fff;
+            background-image: radial-gradient(#15803d 1px, transparent 1px);
+            background-size: 20px 20px;
+            border: 8px double #15803d;
+            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .seal {
+            background: linear-gradient(135deg, #eab308, #ca8a04);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Progress Bar Animation */
+        .progress-bar { transition: width 1.5s ease-out; }
+
+        /* Timeline */
+        .timeline-dot { transition: all 0.3s; }
+        .timeline-item:hover .timeline-dot { transform: scale(1.3); background-color: #15803d; }
+
+        /* Roadmap Sub-nav */
+        .roadmap-nav-btn {
+            border-bottom: 2px solid transparent;
+            color: #64748b;
+            padding: 8px 16px;
+            font-weight: 500;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .roadmap-nav-btn.active {
+            border-bottom-color: #15803d;
+            color: #15803d;
+            background-color: #dcfce7;
+        }
+        .roadmap-content { display: none; }
+        .roadmap-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- HERO SECTION -->
+    <header class="relative bg-gradient-to-br from-green-800 to-green-950 text-white py-12 px-4 text-center overflow-hidden">
+        <!-- Decoration Circles -->
+        <div class="absolute top-[-50px] left-[-50px] w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-[-20px] right-[-20px] w-60 h-60 bg-yellow-500/10 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 animate-fade-in-up">
+            <p class="text-green-300 uppercase tracking-[0.2em] text-sm mb-2 font-bold">Tổng kết hành trình 6 tuần</p>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">CHÚC MỪNG BẠN ĐÃ VỀ ĐÍCH!</h1>
+            <p class="text-lg md:text-xl font-light text-green-100 max-w-2xl mx-auto">"Kết thúc chỉ là sự khởi đầu cho một hành trình chuyển hóa mới."</p>
+            <button onclick="celebrate()" class="mt-8 bg-white text-green-900 px-8 py-3 rounded-full font-bold shadow-lg hover:bg-green-50 hover:scale-105 transition transform flex items-center gap-2 mx-auto">
+                <i class="ph-fill ph-confetti"></i> Ăn mừng ngay
+            </button>
+        </div>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <div class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-1 md:space-x-4 overflow-x-auto py-2">
+                <button onclick="switchView('journey')" class="nav-btn active px-4 py-2 rounded-lg font-bold text-sm uppercase transition text-green-700 bg-green-50" id="btn-journey">
+                    1. Nhìn Lại
+                </button>
+                <button onclick="switchView('growth')" class="nav-btn px-4 py-2 rounded-lg font-bold text-sm uppercase transition text-slate-500 hover:bg-slate-50" id="btn-growth">
+                    2. Đo Lường
+                </button>
+                <button onclick="switchView('certificate')" class="nav-btn px-4 py-2 rounded-lg font-bold text-sm uppercase transition text-slate-500 hover:bg-slate-50" id="btn-certificate">
+                    3. Chứng Nhận
+                </button>
+                <button onclick="switchView('roadmap')" class="nav-btn px-4 py-2 rounded-lg font-bold text-sm uppercase transition text-slate-500 hover:bg-slate-50" id="btn-roadmap">
+                    4. Lộ Trình
+                </button>
+                <button onclick="switchView('feedback360')" class="nav-btn px-4 py-2 rounded-lg font-bold text-sm uppercase transition text-slate-500 hover:bg-slate-50" id="btn-feedback360">
+                    5. Phản Hồi 360°
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
+
+        <!-- VIEW 1: JOURNEY TIMELINE (NHÌN LẠI) -->
+        <div id="view-journey" class="view-section animate-fade-in">
+            <h2 class="heading text-3xl text-center text-slate-800 mb-8">Dòng Thời Gian Chuyển Hóa</h2>
+            <div class="relative border-l-4 border-green-200 ml-4 md:ml-10 space-y-8 pb-8">
+                
+                <!-- Week 1 -->
+                <div class="timeline-item relative pl-8">
+                    <div class="timeline-dot absolute -left-[10px] top-1 w-5 h-5 bg-green-400 rounded-full border-4 border-white shadow-sm"></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                        <span class="text-xs font-bold text-green-600 uppercase">Tuần 1</span>
+                        <h3 class="heading text-xl font-bold text-slate-800">Kích Hoạt & Cam Kết</h3>
+                        <p class="text-slate-600 text-sm mt-1">Bạn đã viết xuống bản Hiến chương và Kế hoạch 30 ngày. Nhớ lại cảm giác hào hứng lúc đó chứ?</p>
+                    </div>
+                </div>
+
+                <!-- Week 2-3 -->
+                <div class="timeline-item relative pl-8">
+                    <div class="timeline-dot absolute -left-[10px] top-1 w-5 h-5 bg-green-500 rounded-full border-4 border-white shadow-sm"></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                        <span class="text-xs font-bold text-green-600 uppercase">Tuần 2-3</span>
+                        <h3 class="heading text-xl font-bold text-slate-800">Vượt "Thung lũng thất vọng"</h3>
+                        <p class="text-slate-600 text-sm mt-1">Group Call #1. Bạn nhận ra việc đặt câu hỏi khó hơn mình tưởng, nhưng bạn không đơn độc.</p>
+                    </div>
+                </div>
+
+                <!-- Week 4 -->
+                <div class="timeline-item relative pl-8">
+                    <div class="timeline-dot absolute -left-[10px] top-1 w-5 h-5 bg-green-600 rounded-full border-4 border-white shadow-sm"></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                        <span class="text-xs font-bold text-green-600 uppercase">Tuần 4</span>
+                        <h3 class="heading text-xl font-bold text-slate-800">Peer Coaching</h3>
+                        <p class="text-slate-600 text-sm mt-1">Thực hành cùng đồng nghiệp. Bạn học được sức mạnh của sự lắng nghe và quan sát.</p>
+                    </div>
+                </div>
+
+                <!-- Week 5 -->
+                <div class="timeline-item relative pl-8">
+                    <div class="timeline-dot absolute -left-[10px] top-1 w-5 h-5 bg-green-700 rounded-full border-4 border-white shadow-sm"></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                        <span class="text-xs font-bold text-green-600 uppercase">Tuần 5</span>
+                        <h3 class="heading text-xl font-bold text-slate-800">Chuyển Hóa</h3>
+                        <p class="text-slate-600 text-sm mt-1">Biến sai lầm thành bài học. Bạn bắt đầu có "Mindset" của một Lãnh đạo Coach.</p>
+                    </div>
+                </div>
+
+                <!-- Week 6 (Now) -->
+                <div class="timeline-item relative pl-8">
+                    <div class="timeline-dot absolute -left-[14px] top-0 w-7 h-7 bg-yellow-400 rounded-full border-4 border-white shadow-md flex items-center justify-center text-[10px]">★</div>
+                    <div class="bg-gradient-to-r from-green-50 to-white p-6 rounded-xl shadow-md border border-green-200">
+                        <span class="text-xs font-bold text-green-800 uppercase">Hôm nay</span>
+                        <h3 class="heading text-2xl font-bold text-green-800">Tốt Nghiệp & Lan Tỏa</h3>
+                        <div class="mt-4">
+                            <label class="block text-sm font-bold text-slate-700 mb-2">✍️ Phản tư nhanh: Từ khóa mô tả sự thay đổi lớn nhất của bạn là gì?</label>
+                            <input type="text" class="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none" placeholder="VD: Kiên nhẫn, Lắng nghe, Trao quyền...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-6">
+                <button onclick="switchView('growth')" class="text-green-700 font-bold hover:underline flex items-center justify-center gap-2 mx-auto">
+                    Tiếp tục đến phần Đo Lường <i class="ph-bold ph-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 2: GROWTH CHART (ĐO LƯỜNG) -->
+        <div id="view-growth" class="view-section hidden">
+            <h2 class="heading text-3xl text-center text-slate-800 mb-2">Biểu Đồ Tăng Trưởng Của Bạn</h2>
+            <p class="text-center text-slate-500 mb-8">So sánh điểm tự đánh giá Tuần 1 và Tuần 6</p>
+
+            <div class="bg-white p-6 md:p-10 rounded-2xl shadow-lg max-w-3xl mx-auto space-y-8">
+                
+                <!-- Skill 1 -->
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-slate-700">👂 Kỹ năng Lắng Nghe Sâu</span>
+                        <span class="text-sm text-green-600 font-bold">+40%</span>
+                    </div>
+                    <div class="relative h-6 bg-slate-100 rounded-full overflow-hidden">
+                        <!-- Before -->
+                        <div class="absolute top-0 left-0 h-full bg-slate-300 w-[40%] flex items-center justify-end pr-2 text-[10px] text-slate-600 font-bold">4.0</div>
+                        <!-- After -->
+                        <div class="absolute top-0 left-0 h-full bg-green-500 opacity-80 progress-bar w-0" data-width="80%"></div>
+                    </div>
+                    <div class="text-xs text-slate-400 mt-1 flex justify-between">
+                        <span>Tuần 1: Chỉ nghe để đáp lời</span>
+                        <span class="text-green-600 font-medium">Tuần 6: Nghe để thấu hiểu</span>
+                    </div>
+                </div>
+
+                <!-- Skill 2 -->
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-slate-700">❓ Kỹ năng Đặt Câu Hỏi</span>
+                        <span class="text-sm text-green-600 font-bold">+60%</span>
+                    </div>
+                    <div class="relative h-6 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="absolute top-0 left-0 h-full bg-slate-300 w-[30%] flex items-center justify-end pr-2 text-[10px] text-slate-600 font-bold">3.0</div>
+                        <div class="absolute top-0 left-0 h-full bg-yellow-400 opacity-90 progress-bar w-0" data-width="75%"></div>
+                    </div>
+                </div>
+
+                <!-- Skill 3 -->
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-slate-700">🧠 Tư duy Trao quyền (Mindset)</span>
+                        <span class="text-sm text-green-600 font-bold">+50%</span>
+                    </div>
+                    <div class="relative h-6 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="absolute top-0 left-0 h-full bg-slate-300 w-[40%] flex items-center justify-end pr-2 text-[10px] text-slate-600 font-bold">4.0</div>
+                        <div class="absolute top-0 left-0 h-full bg-blue-500 opacity-80 progress-bar w-0" data-width="90%"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <h4 class="font-bold text-green-800 mb-2">💡 Gợi ý phản tư:</h4>
+                    <p class="text-sm text-slate-600">Bạn đã tiến bộ nhiều nhất ở kỹ năng nào? Đừng quên ăn mừng chiến thắng nhỏ này nhé!</p>
+                </div>
+            </div>
+
+             <div class="text-center mt-6">
+                <button onclick="switchView('certificate')" class="text-green-700 font-bold hover:underline flex items-center justify-center gap-2 mx-auto">
+                    Nhận Chứng Nhận Cam Kết <i class="ph-bold ph-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: CERTIFICATE (CHỨNG NHẬN) -->
+        <div id="view-certificate" class="view-section hidden">
+            <h2 class="heading text-3xl text-center text-slate-800 mb-2">Chứng Nhận Cam Kết</h2>
+            <p class="text-center text-slate-500 mb-6">Hãy điền tên và cam kết để nhận chứng nhận</p>
+
+            <div class="max-w-3xl mx-auto space-y-6">
+                <!-- Input Form -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <input type="text" id="cert-name" class="p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none" placeholder="Nhập tên của bạn (VD: Nguyễn Văn A)" oninput="updateCert()">
+                    <input type="text" id="cert-power" class="p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none" placeholder="Siêu năng lực của bạn (VD: Người Lắng Nghe)" oninput="updateCert()">
+                </div>
+                <textarea id="cert-commit" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none" rows="2" placeholder="Cam kết 3 tháng tới (VD: Coach cho nhân viên 1 lần/tuần)" oninput="updateCert()"></textarea>
+
+                <!-- Certificate Display -->
+                <div id="certificate-node" class="certificate-container p-8 md:p-12 text-center relative mt-6">
+                    <div class="absolute top-4 left-4 w-16 h-16 border-t-4 border-l-4 border-yellow-500 opacity-50"></div>
+                    <div class="absolute bottom-4 right-4 w-16 h-16 border-b-4 border-r-4 border-yellow-500 opacity-50"></div>
+                    
+                    <div class="mb-6">
+                        <i class="ph-fill ph-certificate text-6xl text-green-800 mb-2"></i>
+                        <h2 class="heading text-3xl md:text-5xl font-bold text-green-900 uppercase tracking-widest">Chứng Nhận</h2>
+                        <p class="text-slate-500 font-serif italic text-lg mt-2">Đã hoàn thành xuất sắc Hành trình Lãnh đạo Coach</p>
+                    </div>
+
+                    <div class="my-8">
+                        <p class="text-slate-400 uppercase text-xs tracking-widest mb-2">Trao tặng cho Nhà Lãnh Đạo</p>
+                        <h3 id="display-name" class="handwritten text-4xl md:text-6xl text-slate-800 mb-4 min-h-[60px]">[Tên Của Bạn]</h3>
+                        <div class="w-24 h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent mx-auto mb-4"></div>
+                        <p class="text-lg text-slate-700">Đã kích hoạt siêu năng lực: <span id="display-power" class="font-bold text-green-700">[Siêu Năng Lực]</span></p>
+                    </div>
+
+                    <div class="bg-green-50 p-6 rounded-lg mx-auto max-w-xl border border-green-100">
+                        <p class="text-green-800 font-bold mb-2">CAM KẾT HÀNH ĐỘNG TIẾP THEO:</p>
+                        <p id="display-commit" class="italic text-slate-600 font-serif">"[Cam kết của bạn sẽ hiện ở đây]"</p>
+                    </div>
+
+                    <div class="mt-12 flex justify-between items-end px-4 md:px-12">
+                        <div class="text-center">
+                            <div class="seal w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-xs mx-auto mb-2 border-4 border-yellow-300">
+                                COMPLETED<br>2025
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-10 mx-auto mb-2 font-dancing text-2xl text-slate-600 font-bold" style="font-family: 'Dancing Script', cursive;">Rosie Đào Hạnh Giang</div>
+                            <div class="w-48 h-px bg-slate-400 mx-auto"></div>
+                            <p class="text-xs text-slate-400 mt-1 font-bold">FACILITATOR</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center pt-4">
+                     <p class="text-sm text-slate-500 mb-2">Chụp màn hình chứng nhận này để lưu lại kỷ niệm nhé!</p>
+                     <button onclick="celebrate()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-3 rounded-full font-bold shadow-lg transition transform hover:-translate-y-1">
+                        🎉 Ký tên & Hoàn tất
+                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 4: ROADMAP (LỘ TRÌNH CHI TIẾT) -->
+        <div id="view-roadmap" class="view-section hidden">
+            <h2 class="heading text-3xl text-center text-slate-800 mb-6">Tra Cứu Lộ Trình 6 Tuần</h2>
+            
+            <div class="bg-white p-4 rounded-xl shadow-lg border border-green-100">
+                <!-- Roadmap Navigation -->
+                <div class="flex justify-start md:justify-center overflow-x-auto border-b border-slate-100 pb-2 mb-6">
+                    <button class="roadmap-nav-btn active" onclick="switchRoadmap('week1')">Tuần 1</button>
+                    <button class="roadmap-nav-btn" onclick="switchRoadmap('week23')">Tuần 2-3</button>
+                    <button class="roadmap-nav-btn" onclick="switchRoadmap('week4')">Tuần 4</button>
+                    <button class="roadmap-nav-btn" onclick="switchRoadmap('week5')">Tuần 5</button>
+                    <button class="roadmap-nav-btn" onclick="switchRoadmap('week6')">Tuần 6</button>
+                    <button class="roadmap-nav-btn" onclick="switchRoadmap('tools')">Kho Công Cụ</button>
+                </div>
+
+                <!-- Roadmap Content -->
+                <div id="roadmap-week1" class="roadmap-content active animate-fade-in">
+                    <div class="border-l-4 border-teal-500 pl-4 mb-4">
+                        <h3 class="text-xl font-bold text-teal-700">Tuần 1: Kích Hoạt Hành Động</h3>
+                        <p class="text-sm text-slate-500">Mục tiêu: Biến năng lượng thành cam kết.</p>
+                    </div>
+                    <ul class="space-y-3 text-slate-700">
+                        <li class="flex items-center gap-3 bg-teal-50 p-3 rounded-lg"><i class="ph-bold ph-check-circle text-teal-600"></i> Lập Kế Hoạch Hành Động Cá Nhân (30 ngày).</li>
+                        <li class="flex items-center gap-3 bg-teal-50 p-3 rounded-lg"><i class="ph-bold ph-check-circle text-teal-600"></i> Xây dựng Hiến Chương Nhóm (Team Charter).</li>
+                        <li class="flex items-center gap-3 bg-teal-50 p-3 rounded-lg"><i class="ph-bold ph-check-circle text-teal-600"></i> Check-in cuối tuần: 1 điều đã làm được.</li>
+                    </ul>
+                </div>
+
+                <div id="roadmap-week23" class="roadmap-content">
+                    <div class="border-l-4 border-indigo-500 pl-4 mb-4">
+                        <h3 class="text-xl font-bold text-indigo-700">Tuần 2-3: Group Call #1</h3>
+                        <p class="text-sm text-slate-500">Mục tiêu: Vượt qua sự bỡ ngỡ ban đầu.</p>
+                    </div>
+                    <ul class="space-y-3 text-slate-700">
+                        <li class="flex items-center gap-3 bg-indigo-50 p-3 rounded-lg"><i class="ph-bold ph-users-three text-indigo-600"></i> Tham gia Group Call #1: Cùng nhau vượt khó.</li>
+                        <li class="flex items-center gap-3 bg-indigo-50 p-3 rounded-lg"><i class="ph-bold ph-chats-circle text-indigo-600"></i> Thực hiện buổi Coaching 1:1 thực tế đầu tiên.</li>
+                        <li class="flex items-center gap-3 bg-indigo-50 p-3 rounded-lg"><i class="ph-bold ph-notebook text-indigo-600"></i> Ghi chép bài học vào Nhật ký Coaching.</li>
+                    </ul>
+                </div>
+
+                <div id="roadmap-week4" class="roadmap-content">
+                    <div class="border-l-4 border-orange-500 pl-4 mb-4">
+                        <h3 class="text-xl font-bold text-orange-700">Tuần 4: Peer Coaching</h3>
+                        <p class="text-sm text-slate-500">Mục tiêu: Mài giũa kỹ năng trong môi trường an toàn.</p>
+                    </div>
+                    <ul class="space-y-3 text-slate-700">
+                        <li class="flex items-center gap-3 bg-orange-50 p-3 rounded-lg"><i class="ph-bold ph-arrows-clockwise text-orange-600"></i> Thực hành nhóm 3 người (Coach - Coachee - Observer).</li>
+                        <li class="flex items-center gap-3 bg-orange-50 p-3 rounded-lg"><i class="ph-bold ph-clipboard-text text-orange-600"></i> Sử dụng Phiếu Phản Hồi để góp ý chéo.</li>
+                        <li class="flex items-center gap-3 bg-orange-50 p-3 rounded-lg"><i class="ph-bold ph-star text-orange-600"></i> Tự đánh giá sau buổi thực hành.</li>
+                    </ul>
+                </div>
+
+                <div id="roadmap-week5" class="roadmap-content">
+                    <div class="border-l-4 border-yellow-500 pl-4 mb-4">
+                        <h3 class="text-xl font-bold text-yellow-700">Tuần 5: Group Call #2</h3>
+                        <p class="text-sm text-slate-500">Mục tiêu: Chuyển hóa thách thức thành bài học.</p>
+                    </div>
+                    <ul class="space-y-3 text-slate-700">
+                        <li class="flex items-center gap-3 bg-yellow-50 p-3 rounded-lg"><i class="ph-bold ph-lightbulb text-yellow-600"></i> Phân tích Case Study (Thành công & Thất bại).</li>
+                        <li class="flex items-center gap-3 bg-yellow-50 p-3 rounded-lg"><i class="ph-bold ph-magic-wand text-yellow-600"></i> Học cách Reframe (Đổi góc nhìn) từ tiêu cực sang tích cực.</li>
+                        <li class="flex items-center gap-3 bg-yellow-50 p-3 rounded-lg"><i class="ph-bold ph-presentation text-yellow-600"></i> Xem Demo Coaching nâng cao từ giảng viên.</li>
+                    </ul>
+                </div>
+
+                <div id="roadmap-week6" class="roadmap-content">
+                    <div class="border-l-4 border-purple-500 pl-4 mb-4">
+                        <h3 class="text-xl font-bold text-purple-700">Tuần 6: Tốt Nghiệp</h3>
+                        <p class="text-sm text-slate-500">Mục tiêu: Ghi nhận và cam kết tiếp nối.</p>
+                    </div>
+                    <ul class="space-y-3 text-slate-700">
+                        <li class="flex items-center gap-3 bg-purple-50 p-3 rounded-lg"><i class="ph-bold ph-chart-line-up text-purple-600"></i> Làm lại bài Tự đánh giá năng lực (so sánh với Tuần 1).</li>
+                        <li class="flex items-center gap-3 bg-purple-50 p-3 rounded-lg"><i class="ph-bold ph-users text-purple-600"></i> Nhận phản hồi 360 độ từ nhân viên (ẩn danh).</li>
+                        <li class="flex items-center gap-3 bg-purple-50 p-3 rounded-lg"><i class="ph-bold ph-medal text-purple-600"></i> Nhận chứng nhận và xác định cam kết 3 tháng tới.</li>
+                    </ul>
+                </div>
+
+                <div id="roadmap-tools" class="roadmap-content">
+                    <div class="border-l-4 border-slate-500 pl-4 mb-4">
+                        <h3 class="text-xl font-bold text-slate-700">Kho Báu Công Cụ</h3>
+                        <p class="text-sm text-slate-500">Các mô hình cốt lõi.</p>
+                    </div>
+                    <div class="grid gap-3">
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <strong class="text-green-700 block mb-1">Mô hình GROW</strong>
+                            <p class="text-sm text-slate-600">G (Goal) -> R (Reality) -> O (Options) -> W (Will)</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <strong class="text-green-700 block mb-1">Nhật Ký Coaching</strong>
+                            <p class="text-sm text-slate-600">Công cụ phản tư sau mỗi buổi coach: Điều làm tốt, điều cần cải thiện, bài học rút ra.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <strong class="text-green-700 block mb-1">Góc Aha!</strong>
+                            <p class="text-sm text-slate-600">Ghi lại những khoảnh khắc bừng sáng và ý tưởng mới.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-green-900 text-green-200 text-center py-6 text-sm">
+        <p>"Hành trình vạn dặm bắt đầu từ một bước chân. Và bước tiếp theo quan trọng hơn bước đầu tiên."</p>
+    </footer>
+
+    <script>
+        // --- NAVIGATION LOGIC ---
+        function switchView(viewName) {
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.add('hidden');
+            });
+            // Show selected
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active', 'text-green-700', 'bg-green-50');
+                btn.classList.add('text-slate-500');
+            });
+            const activeBtn = document.getElementById(`btn-${viewName}`);
+            activeBtn.classList.add('active', 'text-green-700', 'bg-green-50');
+            activeBtn.classList.remove('text-slate-500');
+
+            // Trigger animations specific to views
+            if (viewName === 'growth') {
+                setTimeout(animateBars, 300);
+            }
+        }
+
+        // --- ROADMAP SUB-NAV LOGIC ---
+        function switchRoadmap(id) {
+            // Update buttons
+            document.querySelectorAll('.roadmap-nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show content
+            document.querySelectorAll('.roadmap-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`roadmap-${id}`).classList.add('active');
+        }
+
+        // --- ANIMATIONS ---
+        function animateBars() {
+            document.querySelectorAll('.progress-bar').forEach(bar => {
+                bar.style.width = bar.getAttribute('data-width');
+            });
+        }
+
+        // --- CERTIFICATE LOGIC ---
+        function updateCert() {
+            const name = document.getElementById('cert-name').value;
+            const power = document.getElementById('cert-power').value;
+            const commit = document.getElementById('cert-commit').value;
+
+            document.getElementById('display-name').textContent = name || "[Tên Của Bạn]";
+            document.getElementById('display-power').textContent = power || "[Siêu Năng Lực]";
+            document.getElementById('display-commit').textContent = commit ? `"${commit}"` : "[Cam kết của bạn]";
+        }
+
+        // --- CONFETTI LOGIC ---
+        function celebrate() {
+            const duration = 3000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                // since particles fall down, start a bit higher than random
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        // Initialize animations on load if visible? No, wait for tab switch.
+    </script>
+</body>
+</html>
+
+
+        <!-- VIEW 5: PHẢN HỒI 360 (NEW TAB) -->
+        <div id="view-feedback360" class="view-section hidden">
+            <h2 class="heading text-3xl text-center text-slate-800 mb-6">Phản Hồi 360 Độ: Góc Nhìn Từ Nhân Viên</h2>
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-purple-100">
+                
+                <div class="bg-purple-50 p-4 rounded-lg mb-6 border-l-4 border-purple-500 text-slate-700">
+                    <h4 class="font-bold text-purple-800 mb-1">🎯 Mục đích:</h4>
+                    <p class="text-sm">Đây là bảng khảo sát dùng để gửi cho nhân viên/cấp dưới của bạn. Kết quả sẽ giúp bạn nhìn thấy "điểm mù" và đo lường thực tế sự thay đổi hành vi lãnh đạo của bạn trong mắt người khác.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Section 1: Lắng Nghe -->
+                    <div class="border-b border-slate-100 pb-4">
+                        <h3 class="font-bold text-lg text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-purple-100 text-purple-700 w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                            Kỹ Năng Lắng Nghe
+                        </h3>
+                        <p class="text-sm text-slate-500 mb-2">Trong 6 tuần qua, Quản lý của bạn có...</p>
+                        <div class="space-y-2 text-sm text-slate-700">
+                            <label class="flex items-start gap-2 p-2 hover:bg-slate-50 rounded cursor-pointer">
+                                <input type="checkbox" class="mt-1 accent-purple-600">
+                                <span>Dành thời gian lắng nghe bạn chia sẻ hết ý kiến trước khi đưa ra nhận xét không?</span>
+                            </label>
+                            <label class="flex items-start gap-2 p-2 hover:bg-slate-50 rounded cursor-pointer">
+                                <input type="checkbox" class="mt-1 accent-purple-600">
+                                <span>Không ngắt lời hay làm việc riêng (check điện thoại) khi đang nói chuyện với bạn?</span>
+                            </label>
+                            <label class="flex items-start gap-2 p-2 hover:bg-slate-50 rounded cursor-pointer">
+                                <input type="checkbox" class="mt-1 accent-purple-600">
+                                <span>Thể hiện sự thấu hiểu cảm xúc/khó khăn của bạn (Empathy)?</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Đặt Câu Hỏi & Trao Quyền -->
+                    <div class="border-b border-slate-100 pb-4">
+                        <h3 class="font-bold text-lg text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-purple-100 text-purple-700 w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                            Đặt Câu Hỏi & Trao Quyền
+                        </h3>
+                        <p class="text-sm text-slate-500 mb-2">Thay đổi nào bạn nhận thấy rõ nhất?</p>
+                        <div class="space-y-2 text-sm text-slate-700">
+                            <label class="flex items-start gap-2 p-2 hover:bg-slate-50 rounded cursor-pointer">
+                                <input type="checkbox" class="mt-1 accent-purple-600">
+                                <span>Thay vì chỉ đạo ngay ("Làm thế này..."), Quản lý hỏi ý kiến bạn ("Em nghĩ sao...?") nhiều hơn.</span>
+                            </label>
+                            <label class="flex items-start gap-2 p-2 hover:bg-slate-50 rounded cursor-pointer">
+                                <input type="checkbox" class="mt-1 accent-purple-600">
+                                <span>Bạn cảm thấy được tin tưởng và tự chủ hơn trong công việc.</span>
+                            </label>
+                            <label class="flex items-start gap-2 p-2 hover:bg-slate-50 rounded cursor-pointer">
+                                <input type="checkbox" class="mt-1 accent-purple-600">
+                                <span>Quản lý kiên nhẫn chờ đợi bạn tự tìm ra giải pháp.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Phản Hồi & Phát Triển -->
+                    <div class="border-b border-slate-100 pb-4">
+                        <h3 class="font-bold text-lg text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-purple-100 text-purple-700 w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
+                            Phản Hồi & Hỗ Trợ
+                        </h3>
+                        <div class="space-y-2 text-sm text-slate-700">
+                            <label class="flex items-start gap-2 p-2 hover:bg-slate-50 rounded cursor-pointer">
+                                <input type="checkbox" class="mt-1 accent-purple-600">
+                                <span>Quản lý đưa ra phản hồi mang tính xây dựng (tập trung vào hành vi/kết quả) thay vì chỉ trích cá nhân.</span>
+                            </label>
+                            <label class="flex items-start gap-2 p-2 hover:bg-slate-50 rounded cursor-pointer">
+                                <input type="checkbox" class="mt-1 accent-purple-600">
+                                <span>Các buổi họp 1:1 trở nên hữu ích và tạo động lực hơn trước đây.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Open Feedback -->
+                    <div>
+                        <h3 class="font-bold text-lg text-slate-800 mb-2">Góp Ý Thẳng Thắn</h3>
+                        <label class="block text-sm text-slate-600 mb-1">Một điều Quản lý nên tiếp tục làm (Start/Continue) và một điều nên thay đổi (Stop):</label>
+                        <textarea id="feedback-text" class="w-full p-3 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 outline-none bg-slate-50" rows="3" placeholder="VD: Hãy tiếp tục lắng nghe như hiện tại, nhưng bớt hỏi dồn dập..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-8 pt-4 border-t border-slate-200 flex justify-end gap-3">
+                    <button onclick="copyFeedbackLink()" class="px-4 py-2 border border-purple-600 text-purple-700 rounded-lg font-bold hover:bg-purple-50 transition flex items-center gap-2">
+                        <i class="ph-bold ph-link"></i> Sao chép Nội dung Khảo sát
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-green-900 text-green-200 text-center py-6 text-sm">
+        <p>"Hành trình vạn dặm bắt đầu từ một bước chân. Và bước tiếp theo quan trọng hơn bước đầu tiên."</p>
+    </footer>
+
+    <script>
+        // --- NAVIGATION LOGIC ---
+        function switchView(viewName) {
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.add('hidden');
+            });
+            // Show selected
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active', 'text-green-700', 'bg-green-50');
+                btn.classList.add('text-slate-500');
+            });
+            const activeBtn = document.getElementById(`btn-${viewName}`);
+            activeBtn.classList.add('active', 'text-green-700', 'bg-green-50');
+            activeBtn.classList.remove('text-slate-500');
+
+            // Trigger animations specific to views
+            if (viewName === 'growth') {
+                setTimeout(animateBars, 300);
+            }
+        }
+
+        // --- ROADMAP SUB-NAV LOGIC ---
+        function switchRoadmap(id) {
+            // Update buttons
+            document.querySelectorAll('.roadmap-nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show content
+            document.querySelectorAll('.roadmap-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`roadmap-${id}`).classList.add('active');
+        }
+
+        // --- ANIMATIONS ---
+        function animateBars() {
+            document.querySelectorAll('.progress-bar').forEach(bar => {
+                bar.style.width = bar.getAttribute('data-width');
+            });
+        }
+
+        // --- CERTIFICATE LOGIC ---
+        function updateCert() {
+            const name = document.getElementById('cert-name').value;
+            const power = document.getElementById('cert-power').value;
+            const commit = document.getElementById('cert-commit').value;
+
+            document.getElementById('display-name').textContent = name || "[Tên Của Bạn]";
+            document.getElementById('display-power').textContent = power || "[Siêu Năng Lực]";
+            document.getElementById('display-commit').textContent = commit ? `"${commit}"` : "[Cam kết của bạn]";
+        }
+
+        // --- CONFETTI LOGIC ---
+        function celebrate() {
+            const duration = 3000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                // since particles fall down, start a bit higher than random
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        // --- COPY FEEDBACK LOGIC ---
+        function copyFeedbackLink() {
+            const text = `KHẢO SÁT PHẢN HỒI 360 ĐỘ\n--------------------------\nAnh/Chị đang tham gia khóa học Lãnh đạo Coach và rất mong nhận được phản hồi chân thực từ các bạn để cải thiện.\n\nCác tiêu chí đánh giá:\n1. Kỹ năng Lắng nghe (Không ngắt lời, thấu hiểu)\n2. Đặt câu hỏi & Trao quyền (Hỏi ý kiến thay vì chỉ đạo)\n3. Phản hồi & Hỗ trợ (Xây dựng, không chỉ trích)\n\nHãy chia sẻ thẳng thắn 1 điều Anh/Chị nên tiếp tục và 1 điều nên thay đổi nhé!\nCảm ơn các bạn!`;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Đã sao chép nội dung khảo sát! Bạn có thể dán vào email hoặc nhóm chat.");
+            });
+        }
+
+    </script>
+</body>
+</html>
